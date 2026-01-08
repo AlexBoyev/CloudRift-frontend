@@ -1,0 +1,265 @@
+:root {
+  --bg: #0f172a;
+  --card-bg: rgba(30, 41, 59, 0.7);
+  --primary: #38bdf8;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --text: #f1f5f9;
+  --shadow: rgba(0, 0, 0, 0.4);
+}
+
+/* 1. GLOBAL LAYOUT */
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Radial Moving Background effect */
+.animated-bg {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+  z-index: -1;
+}
+
+/* 2. HEADER & STATUS INDICATORS */
+header {
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 { margin: 0; font-size: 24px; }
+h1 i { color: var(--primary); margin-right: 10px; }
+h1 span { font-weight: 300; opacity: 0.6; }
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(34, 197, 94, 0.1);
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 14px;
+  color: var(--success);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  font-weight: 500;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: var(--success);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--success);
+  animation: blink 2s infinite ease-in-out;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.9); }
+}
+
+/* 3. GRID SYSTEM */
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 0 40px 60px;
+  flex-wrap: wrap;
+}
+
+/* 4. GLASSMORPHISM CARDS */
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  width: 400px;
+  padding: 28px;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s;
+  box-shadow: 0 15px 35px var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  border-color: var(--primary);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card-header h2 { margin: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+.badge { background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+
+/* Language Borders */
+.c-lang { border-top: 5px solid var(--danger); }
+.java-lang { border-top: 5px solid #f97316; }
+.py-lang { border-top: 5px solid #06b6d4; }
+
+/* 5. INPUTS & FORM ELEMENTS */
+input {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 14px;
+  border-radius: 10px;
+  color: white;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus { border-color: var(--primary); }
+
+/* 6. BUTTON STYLES */
+.btn-row { display: flex; gap: 12px; margin-top: 5px; }
+
+/* Grid for Java List buttons */
+.btn-row.multi {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.btn-row.multi button:first-child { grid-column: span 2; }
+
+button {
+  cursor: pointer;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-main { background: var(--primary); color: #0f172a; }
+.btn-main:hover { transform: scale(1.03); filter: brightness(1.1); }
+
+/* 3D Depth Buttons for Destructive Actions */
+.btn-danger {
+  background: var(--danger);
+  color: white;
+  box-shadow: 0 4px 0 #991b1b;
+}
+
+.btn-danger:hover { background: #dc2626; transform: translateY(-1px); box-shadow: 0 5px 0 #991b1b; }
+.btn-danger:active { transform: translateY(2px); box-shadow: 0 1px 0 #991b1b; }
+.btn-sec { background: #475569; color: white; }
+
+/* 7. VISUALIZATION COMPONENTS */
+.output-scroll {
+  max-height: 280px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+/* FIXED: Vis.js Graph Styling - High Contrast */
+#graph-data {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 12px;
+  margin-top: 15px;
+  height: 350px;
+  cursor: grab;
+}
+
+#graph-data:active { cursor: grabbing; }
+
+/* 8. ITEM ANIMATIONS */
+@keyframes slideIn {
+  from { opacity: 0; transform: scale(0.8) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.stack-item {
+  background: linear-gradient(90deg, #ef4444, #b91c1c);
+  margin: 8px 0;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 800;
+  animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+  border-left: 4px solid rgba(255, 255, 255, 0.4);
+}
+
+.node-chip {
+  background: linear-gradient(135deg, #f97316, #c2410c);
+  padding: 10px 20px;
+  border-radius: 30px;
+  display: inline-block;
+  font-weight: bold;
+  animation: slideIn 0.4s ease-out;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.arrow {
+  color: #f97316;
+  font-size: 22px;
+  margin: 0 10px;
+  vertical-align: middle;
+  filter: drop-shadow(0 0 5px rgba(249, 115, 22, 0.4));
+}
+
+/* 9. TOAST NOTIFICATIONS */
+#toast-container {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  z-index: 10000;
+}
+
+.toast {
+  background: #1e293b;
+  border-left: 6px solid var(--danger);
+  color: white;
+  padding: 18px 28px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-weight: 500;
+  transition: all 0.5s ease;
+  animation: toastIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.toast.success { border-left-color: var(--success); }
+
+@keyframes toastIn {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Graph Form Spacing */
+.split-input { display: flex; gap: 12px; }
+.mt-10 { margin-top: 10px; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
