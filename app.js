@@ -1,4 +1,5 @@
-const BASE_URL = "/api/dashboard";
+const API_BASE = "/api";
+
 let network = null; // Global Vis.js instance reference
 
 // ==========================================
@@ -24,9 +25,10 @@ function showToast(message, isError = true) {
 // ==========================================
 async function fetchStack() {
   try {
-    const res = await fetch(`${BASE_URL}/stack/data`);
-    if (!res.ok) throw new Error(`Stack Status: ${res.status}`);
-    const data = await res.json();
+    const resp = await fetch(`${API_BASE}/stack/data`);
+
+    if (!resp.ok) throw new Error(`Stack Status: ${resp.status}`);
+    const data = await resp.json();
     const display = document.getElementById('stack-data');
     if (Array.isArray(data) && data.length > 0) {
       // Renders with 'stack-item' class for CSS slide-in animations
@@ -45,12 +47,12 @@ async function pushStack() {
   if (!val) return;
   try {
     // FIX: Send as JSON but ensure the 'value' is an integer for the Gateway
-    const res = await fetch(`${BASE_URL}/stack/push`, {
+    const resp = await fetch(`${API_BASE}/stack/push`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ value: parseInt(val) })
     });
-    if (!res.ok) throw new Error();
+    if (!resp.ok) throw new Error();
     input.value = '';
     // Small timeout ensures the DB write is finished before the next fetch
     setTimeout(fetchStack, 150);
@@ -62,8 +64,8 @@ async function pushStack() {
 async function popStack() {
   try {
     // FIX: Match the expected POST method in the Gateway
-    const res = await fetch(`${BASE_URL}/stack/pop`, { method: 'POST' });
-    if (!res.ok) throw new Error();
+    const resp = await fetch(`${API_BASE}/stack/pop`, { method: 'POST' });
+    if (!resp.ok) throw new Error();
     setTimeout(fetchStack, 150);
   } catch (e) {
     showToast('Stack Pop Failed', true);
@@ -75,9 +77,10 @@ async function popStack() {
 // ==========================================
 async function fetchList() {
   try {
-    const res = await fetch(`${BASE_URL}/list/data`);
-    if (!res.ok) throw new Error(`List Status: ${res.status}`);
-    const data = await res.json();
+    const resp = await fetch(`${API_BASE}/list/data`);
+
+    if (!resp.ok) throw new Error(`List Status: ${resp.status}`);
+    const data = await resp.json();
     const display = document.getElementById('list-data');
     if (!Array.isArray(data) || data.length === 0) {
       display.innerHTML = '<span class="empty-msg" style="color: #64748b;">List is Empty</span>';
@@ -97,12 +100,12 @@ async function addList() {
   const val = input.value;
   if (!val) return;
   try {
-    const res = await fetch(`${BASE_URL}/list/add`, {
+    const resp = await fetch(`${API_BASE}/list/add`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ value: val })
     });
-    if (!res.ok) throw new Error();
+    if (!resp.ok) throw new Error();
     input.value = '';
     fetchList();
   } catch (e) {
@@ -112,8 +115,8 @@ async function addList() {
 
 async function delListTail() {
   try {
-    const res = await fetch(`${BASE_URL}/list/delete`, { method: 'POST' });
-    if (!res.ok) throw new Error();
+    const resp = await fetch(`${API_BASE}/list/delete`, { method: 'POST' });
+    if (!resp.ok) throw new Error();
     fetchList();
   } catch (e) {
     showToast('Delete Tail Failed', true);
@@ -122,8 +125,8 @@ async function delListTail() {
 
 async function delListHead() {
   try {
-    const res = await fetch(`${BASE_URL}/list/remove-head`, { method: "POST" });
-    if (!res.ok) throw new Error();
+    const resp = await fetch(`${API_BASE}/list/remove-head`, { method: "POST" });
+    if (!resp.ok) throw new Error();
     fetchList();
   } catch (e) {
     showToast('Delete Head Failed', true);
@@ -140,9 +143,10 @@ function getCurrentNodeIds() {
 
 async function fetchGraph() {
   try {
-    const res = await fetch(`${BASE_URL}/graph/data`);
-    if (!res.ok) throw new Error();
-    const data = await res.json();
+    const resp = await fetch(`${API_BASE}/graph/data`);
+
+    if (!resp.ok) throw new Error();
+    const data = await resp.json();
 
     const nodeData = (data.nodes || [])
       .filter(n => n != null)
@@ -200,12 +204,12 @@ async function addGraphNode() {
 
   const label = raw.trim().toUpperCase();
   try {
-    const res = await fetch(`${BASE_URL}/graph/add-node`, {
+    const resp = await fetch(`${API_BASE}/graph/add-node`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ label })
     });
-    if (!res.ok) throw new Error();
+    if (!resp.ok) throw new Error();
     input.value = '';
     fetchGraph();
   } catch (e) {
@@ -234,12 +238,12 @@ async function addGraphEdge() {
   }
 
   try {
-    const res = await fetch(`${BASE_URL}/graph/add-edge`, {
+    const resp = await fetch(`${API_BASE}/graph/add-edge`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ from: u, to: v })
     });
-    if (!res.ok) throw new Error();
+    if (!resp.ok) throw new Error();
     fromInput.value = '';
     toInput.value = '';
     fetchGraph();
@@ -258,12 +262,12 @@ async function deleteGraphNode() {
 
   const label = input.value.trim().toUpperCase();
   try {
-    const res = await fetch(`${BASE_URL}/graph/delete-node`, {
+    const resp = await fetch(`${API_BASE}/graph/delete-node`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ label })
     });
-    if (!res.ok) throw new Error();
+    if (!resp.ok) throw new Error();
     input.value = '';
     fetchGraph();
   } catch (e) {
@@ -280,12 +284,12 @@ async function deleteGraphEdge() {
   const to = toInput.value.trim().toUpperCase();
 
   try {
-    const res = await fetch(`${BASE_URL}/graph/delete-edge`, {
+    const resp = await fetch(`${API_BASE}/graph/delete-edge`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ from, to })
     });
-    if (!res.ok) throw new Error();
+    if (!resp.ok) throw new Error();
     fromInput.value = '';
     toInput.value = '';
     fetchGraph();
