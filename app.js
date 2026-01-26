@@ -55,6 +55,16 @@ async function refreshBackendVersion() {
 setInterval(refreshBackendVersion, 3000);
 refreshBackendVersion();
 
+async function refreshDevOps() {
+  const r = await fetch("/api/devops", { cache: "no-store" });
+  const d = await r.json();
+  document.getElementById("devops-version").textContent =
+    `DevOps: ${d.devops_sha} @ ${d.applied_at_utc}`;
+}
+
+setInterval(refreshDevOps, 3000);
+refreshDevOps();
+
 async function pushStack() {
   const input = document.getElementById('stack-input');
   const val = input.value;
