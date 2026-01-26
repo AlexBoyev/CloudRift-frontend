@@ -53,7 +53,6 @@ async function refreshBackendVersion() {
 }
 
 setInterval(refreshBackendVersion, 3000);
-refreshBackendVersion();
 
 async function refreshDevOps() {
   const r = await fetch("/api/devops", { cache: "no-store" });
@@ -62,8 +61,19 @@ async function refreshDevOps() {
     `DevOps: ${d.devops_sha} @ ${d.applied_at_utc}`;
 }
 
-setInterval(refreshDevOps, 3000);
-refreshDevOps();
+async function refreshFrontendVersion() {
+  try {
+    const r = await fetch("/api/frontend-version", { cache: "no-store" });
+    if (!r.ok) throw new Error("Frontend Version " + r.status);
+    const v = await r.json();
+    document.getElementById("frontend-version").textContent =
+      `Frontend v.${v.buildsha} @ ${v.buildtimeutc}`;
+  } catch (e) {
+    console.error("Frontend Version Error:", e);
+    document.getElementById("frontend-version").textContent =
+      "Frontend unavailable";
+  }
+}
 
 async function pushStack() {
   const input = document.getElementById('stack-input');
@@ -330,6 +340,13 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchStack();
   fetchList();
   fetchGraph();
+
+  setInterval(refreshBackendVersion, 3000);
+  setInterval(refreshDevOps, 3000);
+  setInterval(refreshFrontendVersion, 3000);
+  refreshFrontendVersion();
+  refreshBackendVersion();
+  refreshDevOps();
 
   // Event Bindings: Stack
   document.getElementById('btn-push').onclick = pushStack;
