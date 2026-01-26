@@ -41,6 +41,20 @@ async function fetchStack() {
   }
 }
 
+async function refreshBackendVersion() {
+  try {
+    const r = await fetch("/api/version", { cache: "no-store" });
+    const v = await r.json();
+    document.getElementById("backend-version").textContent =
+      `Backend: ${v.build_sha} (${v.build_time_utc})`;
+  } catch (e) {
+    document.getElementById("backend-version").textContent = "Backend: unavailable";
+  }
+}
+
+setInterval(refreshBackendVersion, 3000);
+refreshBackendVersion();
+
 async function pushStack() {
   const input = document.getElementById('stack-input');
   const val = input.value;
